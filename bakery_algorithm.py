@@ -1,6 +1,7 @@
 """This module contains an implementation of bakery algorithm.
 
-
+This algorithm guarantees mutual exclusion to a critical section of code
+in a way where only one thread has access to it at a time.
 """
 
 __author__ = "Filip Švec, Tomáš Vavro"
