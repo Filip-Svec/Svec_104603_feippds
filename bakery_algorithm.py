@@ -12,7 +12,11 @@ from time import sleep
 
 # number of threads
 NUM_THREADS = 5
+
+# boolean array indicating whether a thread is choosing its ticket number
 choosing = [False] * NUM_THREADS
+
+# array storing ticket number for every thread
 ticket_number = [0] * NUM_THREADS
 
 
@@ -51,7 +55,7 @@ def critical_section(tid):
         tid      -- thread id
     """
     print(f'Thread {tid} enters critical section')
-    sleep(1)
+    sleep(1)  # simulates a complicated computation
     print(f'Thread {tid} exits critical section')
 
 
