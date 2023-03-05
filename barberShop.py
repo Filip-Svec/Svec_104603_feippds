@@ -33,6 +33,7 @@ def get_haircut(i):
     # TODO: Simulate time and print info when customer gets haircut
 
 
+
 def cut_hair():
     # TODO: Simulate time and print info when barber cuts customer's hair
 
@@ -86,7 +87,8 @@ def main():
         t.join()
 
 # TODO: Global variables C = 5 numOfCustomers N = 3 sizeOfWaitingRoom
-
+C = 5
+N = 3
 
 if __name__ == "__main__":
     main()
