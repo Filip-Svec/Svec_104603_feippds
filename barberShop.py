@@ -27,49 +27,56 @@ class Shared(object):
 
 
 def get_haircut(i):
-    print("CUSTOMER ", i, " is getting a hair cut")
+    print(f"Customer {i} is getting a haircut.")
     sleep(randint(1, 3))
 
 
 def cut_hair():
-    print("BARBER is cutting hair")
+    print("Barber is cutting hair.")
     sleep(randint(1, 3))
 
 
 def balk(i):
-    print("CUSTOMER ", i, " is waiting, room is full")
+    print(f"Waiting room is full, customer {i} is leaving.")
     sleep(randint(1, 3))
 
 
 def growing_hair(i):
+    print(f"Customer {i} is growing hair.")
     sleep(randint(1, 3))
 
 
 def customer(i, shared):
-    # TODO: Function represents customers behaviour. Customer come to waiting if room is full sleep.
-    # TODO: Wake up barber and waits for invitation from barber. Then gets new haircut.
-    # TODO: After it both wait to complete their work. At the end waits to hair grow again
-
     while True:
-        # TODO: Access to waiting room. Could customer enter or must wait? Be careful about counter integrity :)
+        shared.mutex.lock()
+        if shared.waiting_room < N:
+            shared.waiting_room += 1
+            print(f"Customer {i} has entered the waiting room")
+            shared.customer.signal()
+            shared.mutex.unlock()
+            shared.barber.wait()
+            get_haircut(i)
+            shared.customer_done.signal()
+            print(f"Customer {i} is done and leaving")
+            growing_hair(i)
+            shared.barber_done.wait()
 
-        # TODO: Rendezvous 1
-        get_haircut(i)
-        # TODO: Rendezvous 2
-
-        # TODO: Leave waiting room. Integrity again
-        growing_hair(i)
+        else:
+            shared.mutex.unlock()
+            balk(i)
 
 
 def barber(shared):
-    # TODO: Function barber represents barber. Barber is sleeping.
-    # TODO: When customer come to get new hair wakes up barber.
-    # TODO: Barber cuts customer hair and both wait to complete their work.
-
     while True:
-        # TODO: Rendezvous 1
+        shared.customer.wait()
+        shared.mutex.lock()
+        shared.waiting_room -= 1
+        shared.mutex.unlock()
+        shared.barber.signal()
         cut_hair()
-        # TODO: Rendezvous 2
+        shared.customer_done.wait()
+        print(f"Barber is DONE cutting hair")
+        shared.barber_done.signal()
 
 
 def main():
