@@ -32,21 +32,35 @@ class Shared(object):
 
 
 def get_haircut(i):
+    """Simulates getting haircut
+    Arguments:
+        i      -- thread id (customer)
+    """
     print(f"CUSTOMER {i} is getting a haircut.")
     sleep(randint(1, 3))
 
 
 def cut_hair():
+    """"Simulates cutting hair by barber"""
+
     print("\nBARBER is cutting hair.\n")
     sleep(randint(1, 3))
 
 
 def balk(i):
+    """Simulates leaving for the time being
+    Arguments:
+        i      -- thread id (customer)
+    """
     print(f"Waiting room is FULL, CUSTOMER {i} is leaving.")
     sleep(randint(1, 3))
 
 
 def growing_hair(i):
+    """Simulates growing hair
+    Arguments:
+        i      -- thread id (customer)
+    """
     print(f"CUSTOMER {i} is growing hair.")
     sleep(randint(1, 3))
 
