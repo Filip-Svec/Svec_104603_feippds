@@ -28,26 +28,21 @@ class Shared(object):
 
 def get_haircut(i):
     print("CUSTOMER ", i, " is getting a hair cut")
-    sleep(2)
-    # TODO: Simulate time and print info when customer gets haircut
+    sleep(randint(1, 3))
 
 
 def cut_hair():
     print("BARBER is cutting hair")
-    sleep(2)
-    # TODO: Simulate time and print info when barber cuts customer's hair
+    sleep(randint(1, 3))
 
 
 def balk(i):
     print("CUSTOMER ", i, " is waiting, room is full")
-    sleep(3)
-    # TODO: Represents situation when waiting room is full and print info
+    sleep(randint(1, 3))
 
 
 def growing_hair(i):
-    sleep(6)
-    # TODO: Represents situation when customer wait after getting haircut. So hair is growing and customer is
-    #  sleeping for some time
+    sleep(randint(1, 3))
 
 
 def customer(i, shared):
