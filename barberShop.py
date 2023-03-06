@@ -5,13 +5,11 @@ Faculty: FEI Faculty of Electrical Engineering and Information Technology
 Year: 2023
 """
 
-
 __authors__ = "Marián Šebeňa"
 __email__ = "mariansebena@stuba.sk, xvavro@stuba.sk"
 __license__ = "MIT"
 
-
-from fei.ppds import Mutex, Thread
+from fei.ppds import Mutex, Thread, print, Semaphore
 from time import sleep
 from random import randint
 
@@ -19,33 +17,37 @@ from random import randint
 class Shared(object):
 
     def __init__(self):
-
         # TODO : Initialize patterns we need and variables
         self.mutex = Mutex()
         self.waiting_room = 0
-        # self.customer = Rendezvous is implemented as ?
-        # self.barber = Rendezvous is implemented as ?
-        # self.customer_done = Rendezvous is implemented as ?
-        # self.barber_done = Rendezvous is implemented as ?
+        self.customer = Semaphore(0)
+        self.barber = Semaphore(0)
+        self.customer_done = Semaphore(0)
+        self.barber_done = Semaphore(0)
 
 
 def get_haircut(i):
+    print("CUSTOMER ", i, " is getting a hair cut")
+    sleep(2)
     # TODO: Simulate time and print info when customer gets haircut
 
 
-
 def cut_hair():
+    print("BARBER is cutting hair")
+    sleep(2)
     # TODO: Simulate time and print info when barber cuts customer's hair
 
 
 def balk(i):
+    print("CUSTOMER ", i, " is waiting, room is full")
+    sleep(3)
     # TODO: Represents situation when waiting room is full and print info
 
 
-
 def growing_hair(i):
-    # TODO: Represents situation when customer wait after getting haircut. So hair is growing and customer is sleeping for some time
-
+    sleep(6)
+    # TODO: Represents situation when customer wait after getting haircut. So hair is growing and customer is
+    #  sleeping for some time
 
 
 def customer(i, shared):
@@ -85,6 +87,7 @@ def main():
 
     for t in customers + [hair_stylist]:
         t.join()
+
 
 # TODO: Global variables C = 5 numOfCustomers N = 3 sizeOfWaitingRoom
 C = 5
