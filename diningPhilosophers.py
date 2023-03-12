@@ -1,6 +1,7 @@
-"""This module implements left and right-handed dinning philosophers problem.
+"""This module implements dinning philosophers problem.
 
-
+Implementation uses left and right-handed philosophers
+to solve this problem.
 """
 
 __author__ = "Filip Švec, Tomáš Vavro"
@@ -10,12 +11,13 @@ __license__ = "MIT"
 from fei.ppds import Thread, Mutex, print
 from time import sleep
 
-NUM_PHILOSOPHERS = 10
+NUM_PHILOSOPHERS = 6
 NUM_RUNS = 10
 
 
 class Shared:
     """Represent shared data for all threads."""
+
     def __init__(self):
         """Initialize an instance of Shared."""
         self.forks = [Mutex() for _ in range(NUM_PHILOSOPHERS)]
@@ -48,6 +50,8 @@ def philosopher(i, shared):
         i -- philosopher's id
         shared -- shared data
     """
+
+    # choosing which fork to pick up first (left or right)
     is_right_handed = i % 2 == 0
     if is_right_handed:
         first_fork = (i + 1) % NUM_PHILOSOPHERS
@@ -58,9 +62,15 @@ def philosopher(i, shared):
 
     for _ in range(NUM_RUNS):
         think(i)
+
+        # simulate picking up the forks
         shared.forks[first_fork].lock()
         shared.forks[second_fork].lock()
+
+        # only eating after acquiring both forks
         eat(i)
+
+        # simulate putting down the forks
         shared.forks[first_fork].unlock()
         shared.forks[second_fork].unlock()
 
