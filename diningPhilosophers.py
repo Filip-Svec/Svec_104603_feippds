@@ -16,7 +16,6 @@ NUM_RUNS = 10
 
 class Shared:
     """Represent shared data for all threads."""
-
     def __init__(self):
         """Initialize an instance of Shared."""
         self.forks = [Mutex() for _ in range(NUM_PHILOSOPHERS)]
@@ -42,13 +41,28 @@ def eat(i):
     sleep(0.1)
 
 
-def philosopher():
+def philosopher(i, shared):
     """Run philosopher's code.
 
     Args:
         i -- philosopher's id
         shared -- shared data
     """
+    is_right_handed = i % 2 == 0
+    if is_right_handed:
+        first_fork = (i + 1) % NUM_PHILOSOPHERS
+        second_fork = i
+    else:
+        first_fork = i
+        second_fork = (i + 1) % NUM_PHILOSOPHERS
+
+    for _ in range(NUM_RUNS):
+        think(i)
+        shared.forks[first_fork].lock()
+        shared.forks[second_fork].lock()
+        eat(i)
+        shared.forks[first_fork].unlock()
+        shared.forks[second_fork].unlock()
 
 
 def main():
