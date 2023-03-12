@@ -2,6 +2,9 @@
 
 Implementation uses left and right-handed philosophers
 to solve this problem.
+University: STU Slovak Technical University in Bratislava
+Faculty: FEI Faculty of Electrical Engineering and Information Technology
+Year: 2023
 """
 
 __author__ = "Filip Švec, Tomáš Vavro"
