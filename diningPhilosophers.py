@@ -22,6 +22,26 @@ class Shared:
         self.forks = [Mutex() for _ in range(NUM_PHILOSOPHERS)]
 
 
+def think(i):
+    """Simulate thinking.
+
+    Args:
+        i -- philosopher's id
+    """
+    print(f"Philosopher {i} is thinking!")
+    sleep(0.1)
+
+
+def eat(i):
+    """Simulate eating.
+
+    Args:
+        i -- philosopher's id
+    """
+    print(f"Philosopher {i} is eating!")
+    sleep(0.1)
+
+
 def philosopher():
     """Run philosopher's code.
 
