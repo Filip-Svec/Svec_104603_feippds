@@ -31,10 +31,10 @@ class Shared:
         self.mutexCountCooks = Mutex()
         self.empty_pot = Semaphore(0)
         self.full_pot = Semaphore(0)
-        self.turnstile_1_start = Semaphore(0)
-        self.turnstile_2_end = Semaphore(0)
-        self.turnstile_3_cook = Semaphore(0)
-        self.turnstile_4_cook = Semaphore(0)
+        self.turnstile_1_start = Semaphore(0)   # savage barrier
+        self.turnstile_2_end = Semaphore(0)     # savage barrier
+        self.turnstile_3_cook = Semaphore(0)    # cook barrier
+        self.turnstile_4_cook = Semaphore(0)    # cook barrier
 
         self.countSavages = 0
         self.countCooks = 0
