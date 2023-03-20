@@ -51,20 +51,6 @@ def savage(i, shared):
     while True:
 
         # Wait for all other savages to finish eating before getting more food
-        # pravdepodobne tu bude chyba skusit spravit taku simple barieru a ten count-
-        # -len modulovat poctom savages tak aby ich pustilo len ked tam budu vsetcia
-
-        # shared.mutexCountSavages.lock()
-        # shared.countSavages += 1
-        # if shared.countSavages == NUM_SAVAGES:
-        #     print(f'Savage {i} signals to eat. Count = {shared.countSavages}')
-        #     shared.turnstile_1_start.signal(NUM_SAVAGES)
-        #     shared.mutexCountSavages.unlock()
-        # else:
-        #     print(f'Savage {i} is waiting. Count = {shared.countSavages}')
-        #     shared.mutexCountSavages.unlock()
-        #     shared.turnstile_1_start.wait()
-
         shared.mutexCountSavages.lock()
         shared.countSavages += 1
         if shared.countSavages == NUM_SAVAGES:
@@ -75,29 +61,37 @@ def savage(i, shared):
         shared.mutexCountSavages.unlock()
         shared.turnstile_1_start.wait()
 
-        # Lock the whole process
+        # Lock the whole process (kitchen for savages), only one will enter
         shared.mutex_enter_kitchen.lock()
 
-        # Take portion
+        # Savage in the kitchen locks access to the pot
         shared.mutex_accessing_pot.lock()
+
         # Check for empty pot
         if shared.portions_left == 0:
-            shared.full_pot.signal(NUM_COOKS)  # Signal cook that pot is empty
-            print(f"Savage {i} signals cook that pot is empty and waits! \n")
+
+            # Signal cook that pot is empty and unlock access to the pot
+            shared.full_pot.signal(NUM_COOKS)
             shared.mutex_accessing_pot.unlock()
+
+            # Savage waits in the kitchen until cooks are done
+            print(f"Savage {i} signals cook that pot is empty and waits! \n")
             shared.empty_pot.wait()
+
+            # Cooks are done, savage in the kitchen can take his portion
             shared.mutex_accessing_pot.lock()
             shared.portions_left -= 1
-            print(f"Savage {i} is eating! Portions left: {shared.portions_left} / {NUM_PORTIONS_POT}")
+            # print(f"Savage {i} is eating! Portions left: {shared.portions_left} / {NUM_PORTIONS_POT}")
             shared.mutex_accessing_pot.unlock()
         else:
             shared.portions_left -= 1
-            print(f"Savage {i} is eating! Portions left: {shared.portions_left} / {NUM_PORTIONS_POT}")
+            # print(f"Savage {i} is eating! Portions left: {shared.portions_left} / {NUM_PORTIONS_POT}")
             shared.mutex_accessing_pot.unlock()
 
         shared.mutex_enter_kitchen.unlock()
 
         # Simulate eating
+        print(f"Savage {i} is eating! Portions left: {shared.portions_left} / {NUM_PORTIONS_POT}")
         sleep(0.5)
 
         # shared.mutexCountSavages.lock()
