@@ -69,7 +69,7 @@ def savage(i, shared):
         shared.countSavages += 1
         if shared.countSavages == NUM_SAVAGES:
             shared.turnstile_1_start.signal(NUM_SAVAGES)
-            print(f'Savage {i} signals to eat. Count savages = {shared.countSavages} / {NUM_SAVAGES}')
+            print(f'Savage {i} signals to eat. Count savages = {shared.countSavages} / {NUM_SAVAGES} \n')
         else:
             print(f'Savage {i} is waiting. Count savages = {shared.countSavages} / {NUM_SAVAGES}')
         shared.mutexCountSavages.unlock()
@@ -83,7 +83,7 @@ def savage(i, shared):
         # Check for empty pot
         if shared.portions_left == 0:
             shared.full_pot.signal(NUM_COOKS)  # Signal cook that pot is empty
-            print(f"Savage {i} signals cook that pot is empty and waits!")
+            print(f"Savage {i} signals cook that pot is empty and waits! \n")
             shared.mutex_accessing_pot.unlock()
             shared.empty_pot.wait()
             shared.mutex_accessing_pot.lock()
@@ -147,18 +147,18 @@ def cook(i, shared):
         shared.mutexCountCooks.lock()
         shared.countCooks += 1
         if shared.countCooks == NUM_COOKS:
+            print(f'Cook {i} signals to leave kitchen. Savages EAT! Count cooks = {shared.countCooks} / {NUM_COOKS} \n')
             shared.turnstile_3_cook.signal(NUM_COOKS)
+        else:
+            print(f'Cook {i} is waiting. Count cooks = {shared.countCooks} / {NUM_COOKS}')
         shared.mutexCountCooks.unlock()
         shared.turnstile_3_cook.wait()
 
         shared.mutexCountCooks.lock()
         shared.countCooks -= 1
         if shared.countCooks == 0:
-            print(f'Cook {i} signals to leave kitchen. Savages EAT!')
             shared.empty_pot.signal()
             shared.turnstile_4_cook.signal(NUM_COOKS)
-        else:
-            print(f'Cook {i} is waiting. Count cooks = {shared.countCooks}')
         shared.mutexCountCooks.unlock()
         shared.turnstile_4_cook.wait()
 
