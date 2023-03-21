@@ -81,25 +81,25 @@ def savage(i, shared):
             # Cooks are done, savage in the kitchen can take his portion
             shared.mutex_accessing_pot.lock()
             shared.portions_left -= 1
-            # print(f"Savage {i} is eating! Portions left: {shared.portions_left} / {NUM_PORTIONS_POT}")
+            print(f"Savage {i} took portion! Portions left: {shared.portions_left} / {NUM_PORTIONS_POT}")
             shared.mutex_accessing_pot.unlock()
         else:
             shared.portions_left -= 1
-            # print(f"Savage {i} is eating! Portions left: {shared.portions_left} / {NUM_PORTIONS_POT}")
+            print(f"Savage {i} took portion! Portions left: {shared.portions_left} / {NUM_PORTIONS_POT}")
             shared.mutex_accessing_pot.unlock()
 
         # Another savage can enter chicken
         shared.mutex_enter_kitchen.unlock()
 
         # Savage is eating
-        print(f"Savage {i} is eating! Portions left: {shared.portions_left} / {NUM_PORTIONS_POT}")
+        print(f"Savage {i} is eating!")
         sleep(0.5)
 
         # Reusable barrier second part
         shared.mutexCountSavages.lock()
         shared.countSavages -= 1
         if shared.countSavages == 0:
-            print(f"Every savage has eaten. Ah shh, here we go again.\n")
+            print(f"Every savage has eaten. Ah #$@1, here we go again.\n")
             shared.turnstile_2_end.signal(NUM_SAVAGES)
         shared.mutexCountSavages.unlock()
         shared.turnstile_2_end.wait()
@@ -126,7 +126,7 @@ def cook(i, shared):
                 break
             else:
                 shared.portions_left += 1
-                print(f"Cook {i} cooked a portion! Portions left: {shared.portions_left} / {NUM_PORTIONS_POT}")
+                print(f"Cook {i} added a portion! Portions left: {shared.portions_left} / {NUM_PORTIONS_POT}")
                 shared.mutex_accessing_pot.unlock()
                 sleep(0.2)
 
